@@ -1,0 +1,85 @@
+id	jp	note
+GFX.MM.01	フリー対局	main menu button (BG #25/#26, OBJ #27)
+GFX.MM.02	段位 状態	main menu button (BG #25/#26, OBJ #27)
+GFX.MM.03	段位 審査	main menu button (BG #25/#26, OBJ #27)
+GFX.MM.04	プレイデータ	main menu button (BG #25/#26, OBJ #27)
+GFX.MM.05	月例 大会	main menu button (BG #25/#26, OBJ #27)
+GFX.MM.06	コンフィグ	main menu button (BG #25/#26, OBJ #27)
+GFX.MM.07	麻雀 指南	main menu button (BG #25/#26, OBJ #27)
+GFX.MM.08	終 了	main menu button (BG #25/#26, OBJ #27)
+GFX.NE.01	かな	name entry tab: page 1 (BG #18/#19/#20, OBJ #24)
+GFX.NE.02	カナ	name entry tab: page 2
+GFX.NE.03	男	gender
+GFX.NE.04	女	gender
+GFX.NE.05	顔	portrait
+GFX.NE.06	決定	confirm
+GFX.PD.01	プレイデータ	play data title (BG #53/#54/#55)
+GFX.PD.02	個人	play data tab
+GFX.PD.03	役満	play data tab
+GFX.PD.04	大会	play data tab
+GFX.PD.05	段位	play data tab
+GFX.PD.06	性格	button (OBJ #60)
+GFX.PD.10	師範代	graph rank label (T-002)
+GFX.PD.11	5段	graph rank label
+GFX.PD.12	4段	graph rank label
+GFX.PD.13	3段	graph rank label
+GFX.PD.14	2段	graph rank label
+GFX.PD.15	初段	graph rank label
+GFX.PD.16	なし	graph rank label
+GFX.QT.01	ゲームを終了しますか?	quit dialog (BG3 #47/#48)
+GFX.QT.02	はい	quit dialog option
+GFX.QT.03	いいえ	quit dialog option
+GFX.QT.04	おつかれさまでした	after quit (BG3 #47/#49)
+GFX.QT.05	電源を切って下さい	after quit
+GFX.MT.01	第	tournament banner (#139)
+GFX.MT.02	節	tournament banner
+GFX.MT.03	優勝者	tournament winner label (#139)
+GFX.MT.04	優勝	bracket winner badge (BG3 #183)
+GFX.RU.01	ルール設定	rules title (TP string $03:CDBC, sheet #81)
+GFX.RU.02	焼き鳥	rules item ($03:CEE2, grows by one cell)
+GFX.RU.03	馬	rules item ($03:CEEA)
+GFX.IG.01	ポン	in-game call button (#99)
+GFX.IG.02	チー	
+GFX.IG.03	カン	
+GFX.IG.04	ロン	
+GFX.IG.05	リーチ	
+GFX.IG.06	点数表示	pause menu (#99)
+GFX.IG.07	コンフィグ	
+GFX.IG.08	ルール表示	
+GFX.IG.09	常に指南	
+GFX.IG.10	必要時R	
+GFX.IG.11	東	round badge glyph (#99)
+GFX.IG.12	場	
+GFX.IG.13	局	
+GFX.IG.14	南	
+GFX.IG.15	西	
+GFX.IG.16	北	
+GFX.IG.20	ツモ	in-game button (#100)
+GFX.IG.21	半荘回数	
+GFX.IG.22	倒牌	
+GFX.IG.23	大会状態	
+GFX.IG.24	現在の得点	
+GFX.IG.25	麻雀指南	
+GFX.IG.30	九種么九牌倒牌	abortive draw badge (OBJ #102)
+GFX.IG.31	四風子連打	
+GFX.IG.32	四開槓	
+GFX.IG.33	四家立直	
+GFX.IG.34	聴牌	tenpai badge
+GFX.IG.35	不聴	noten badge
+GFX.IG.36	荒牌	exhaustive draw badge
+GFX.IG.37	仮東	temporary east marker (#102, #86)
+GFX.IG.40	東南西北家	table-center seat labels (#96, 1:1 glyphs)
+GFX.IG.41	計	score table total row label (#109 tiles 19/1A/1B/1C)
+GFX.IG.50	半荘を続けますか?	end-of-hanchan dialog (TP $01:D37D, sheet #13)
+GFX.IG.51	はい	
+GFX.IG.52	いいえ	
+GFX.SN.01	麻雀指南	Shinan intro sign (BG1 #189/#190)
+GFX.EX.01	審査	exam header (BG3 #126, code-built map)
+GFX.EX.02	期目	exam header: N期目 -> N기
+GFX.EX.03	回戦	exam header: N回戦 -> N회전
+GFX.EX.04	ブロック	exam header vertical block label
+GFX.EX.05	計	exam score total
+GFX.EX.10	位	exam ranking: N位 -> N위 (BG1 #132)
+GFX.EX.11	合計	exam ranking total
+GFX.CD.01	キャラクターデータ	character data title (BG #69/#70/#71)
+GFX.EX.20	審査判定	exam judgement title (BG1 #136/#137)

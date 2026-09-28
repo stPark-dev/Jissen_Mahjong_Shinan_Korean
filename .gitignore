@@ -1,0 +1,15 @@
+# Source ROMs and built products are never committed
+*.sfc
+*.smc
+*.srm
+*.state
+# External tool checkouts/builds and scratch output
+.ext/
+build/
+work/
+__pycache__/
+# Source-derived dumps (regenerate locally; see docs/status.md)
+text/jp/*.tsv
+!text/jp/GFX.tsv
+text/jp/parts/
+data/*map.bin

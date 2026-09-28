@@ -1,0 +1,18 @@
+id	ko	status	note
+TPC.0000	<FC>환경설정<FD>	draft	
+TPC.0001	<FC>BGM<FD>	draft	
+TPC.0002	<FC>음성<FD>	draft	
+TPC.0003	<FC>자동쯔모<FD>	draft	
+TPC.0004	<FC>창색상<FD>	draft	
+TPC.0005	<FC><104E>ON<104E><FD>	draft	
+TPC.0006	<FC>OFF<FD>	draft	
+TPC.0007	<FC><1000><FD>	draft	
+TPC.0008	<FC><1021><FD>	draft	
+TPC.0009	<FC><1020><FD>	draft	
+TPC.0010	<FC>속도<FD>	draft	
+TPC.0011	<FC>빠름<FD>	draft	
+TPC.0012	<FC>보통<FD>	draft	
+TPC.0013	<FC>느림<FD>	draft	
+TPC.0014	<FC>1번곡<FD>	draft	
+TPC.0015	<FC>2번곡<FD>	draft	
+TPC.0016	<FC>3번곡<FD>	draft	

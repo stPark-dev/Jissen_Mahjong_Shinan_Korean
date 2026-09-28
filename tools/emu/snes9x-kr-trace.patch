@@ -1,0 +1,142 @@
+diff --git a/cpuexec.cpp b/cpuexec.cpp
+index ae00a5f..c59b78e 100644
+--- a/cpuexec.cpp
++++ b/cpuexec.cpp
+@@ -1,3 +1,4 @@
++#include "kr_trace.h"
+ /*****************************************************************************\
+      Snes9x - Portable Super Nintendo Entertainment System (TM) emulator.
+                 This file is licensed under the Snes9x License.
+@@ -146,6 +147,7 @@ void S9xMainLoop (void)
+ 			uint8				Op;
+ 			struct	SOpcodes	*Opcodes;
+ 
++			if (kr_on && Registers.PBPC >= kr_xlo && Registers.PBPC <= kr_xhi) kr_log(2, Registers.PBPC, 0, 0);
+ 			if (CPU.PCBase)
+ 			{
+ 				Op = CPU.PCBase[Registers.PCw];
+diff --git a/dma.cpp b/dma.cpp
+index e1ad324..5ad2a80 100644
+--- a/dma.cpp
++++ b/dma.cpp
+@@ -1,3 +1,4 @@
++#include "kr_trace.h"
+ /*****************************************************************************\
+      Snes9x - Portable Super Nintendo Entertainment System (TM) emulator.
+                 This file is licensed under the Snes9x License.
+@@ -56,6 +57,7 @@ bool8 S9xDoDMA (uint8 Channel)
+ 	CPU.CurrentDMAorHDMAChannel = Channel;
+ 
+     SDMA	*d = &DMA[Channel];
++	if (kr_on) kr_log(3, (d->ABank << 16) | d->AAddress, (d->BAddress) | (d->TransferMode << 8) | (d->ReverseTransfer << 12), (d->TransferBytes & 0xffff) | ((uint32)PPU.VMA.Address << 16));
+ 
+ 	// Check invalid DMA first
+ 	if ((d->ABank == 0x7E || d->ABank == 0x7F) && d->BAddress == 0x80 && !d->ReverseTransfer)
+diff --git a/getset.h b/getset.h
+index ec55ea9..55fc9b9 100644
+--- a/getset.h
++++ b/getset.h
+@@ -16,6 +16,7 @@
+ #include "seta.h"
+ #include "bsx.h"
+ #include "msu1.h"
++#include "kr_trace.h"
+ 
+ #define addCyclesInMemoryAccess \
+ 	if (!CPU.InDMAorHDMA) \
+@@ -60,6 +61,7 @@ inline uint8 S9xGetByte (uint32 Address)
+ 	uint8	*GetAddress = Memory.Map[block];
+ 	int32	speed = memory_speed(Address);
+ 	uint8	byte;
++	KR_READ(Address & 0xffffff, 0);
+ 
+ 	if (GetAddress >= (uint8 *) CMemory::MAP_LAST)
+ 	{
+@@ -160,6 +162,8 @@ inline uint8 S9xGetByte (uint32 Address)
+ inline uint16 S9xGetWord (uint32 Address, enum s9xwrap_t w = WRAP_NONE)
+ {
+ 	uint16	word;
++	KR_READ(Address & 0xffffff, 0x10000);
++	KR_READ((Address + 1) & 0xffffff, 0x10001);
+ 
+ 	uint32	mask = MEMMAP_MASK & (w == WRAP_PAGE ? 0xff : (w == WRAP_BANK ? 0xffff : 0xffffff));
+ 	if ((Address & mask) == mask)
+@@ -319,6 +323,7 @@ inline uint16 S9xGetWord (uint32 Address, enum s9xwrap_t w = WRAP_NONE)
+ 
+ inline void S9xSetByte (uint8 Byte, uint32 Address)
+ {
++	KR_WRITE(Address & 0xffffff, Byte);
+ 	int		block = (Address & 0xffffff) >> MEMMAP_SHIFT;
+ 	uint8	*SetAddress = Memory.WriteMap[block];
+ 	int32	speed = memory_speed(Address);
+@@ -425,6 +430,8 @@ inline void S9xSetByte (uint8 Byte, uint32 Address)
+ 
+ inline void S9xSetWord (uint16 Word, uint32 Address, enum s9xwrap_t w = WRAP_NONE, enum s9xwriteorder_t o = WRITE_01)
+ {
++	KR_WRITE(Address & 0xffffff, Word & 0xff);
++	KR_WRITE((Address + 1) & 0xffffff, Word >> 8);
+ 	uint32	mask = MEMMAP_MASK & (w == WRAP_PAGE ? 0xff : (w == WRAP_BANK ? 0xffff : 0xffffff));
+ 	if ((Address & mask) == mask)
+ 	{
+diff --git a/kr_trace.cpp b/kr_trace.cpp
+new file mode 100644
+index 0000000..5cb5394
+--- /dev/null
++++ b/kr_trace.cpp
+@@ -0,0 +1,28 @@
++#include "snes9x.h"
++#include "memmap.h"
++#include "ppu.h"
++#include "kr_trace.h"
++uint32 kr_rlo = 1, kr_rhi = 0, kr_wlo = 1, kr_whi = 0, kr_xlo = 1, kr_xhi = 0, kr_on = 0, kr_plo = 0, kr_phi = 0xFFFFFF;
++static KrEvent kr_buf[1 << 20];
++static uint32 kr_n = 0;
++void kr_log(uint32 kind, uint32 addr, uint32 val, uint32 extra)
++{
++	if (kr_n >= (1u << 20)) return;
++	KrEvent &e = kr_buf[kr_n++];
++	e.kind = kind; e.pbpc = Registers.PBPC; e.addr = addr; e.val = val; e.extra = extra;
++	e.a = Registers.A.W; e.x = Registers.X.W; e.y = Registers.Y.W; e.d = Registers.D.W; e.s = Registers.S.W;
++	e.db = Registers.DB; e.p = Registers.PL; e.pad0 = Registers.PH; e.pad1 = 0;
++}
++extern "C" {
++void retro_kr_set(uint32 rlo, uint32 rhi, uint32 wlo, uint32 whi, uint32 xlo, uint32 xhi, uint32 on)
++{ kr_rlo = rlo; kr_rhi = rhi; kr_wlo = wlo; kr_whi = whi; kr_xlo = xlo; kr_xhi = xhi; kr_on = on; }
++void retro_kr_pcfilter(uint32 lo, uint32 hi) { kr_plo = lo; kr_phi = hi; }
++uint32 retro_kr_count(void) { return kr_n; }
++void *retro_kr_buf(void) { return kr_buf; }
++void retro_kr_clear(void) { kr_n = 0; }
++void *retro_kr_vram(void) { return Memory.VRAM; }
++void *retro_kr_cgram(void) { return PPU.CGDATA; }
++void *retro_kr_oam(void) { return PPU.OAMData; }
++void *retro_kr_regs(void) { return &Registers; }
++void *retro_kr_fillram(void) { return Memory.FillRAM; }
++}
+diff --git a/kr_trace.h b/kr_trace.h
+new file mode 100644
+index 0000000..ed5f872
+--- /dev/null
++++ b/kr_trace.h
+@@ -0,0 +1,10 @@
++#ifndef KR_TRACE_H
++#define KR_TRACE_H
++#include "port.h"
++struct KrEvent { uint32 kind, pbpc, addr, val; uint16 a, x, y, d, s; uint8 db, p, pad0, pad1; uint32 extra; };
++extern uint32 kr_rlo, kr_rhi, kr_wlo, kr_whi, kr_xlo, kr_xhi, kr_on, kr_plo, kr_phi;
++void kr_log(uint32 kind, uint32 addr, uint32 val, uint32 extra);
++#define KR_PCOK (Registers.PBPC >= kr_plo && Registers.PBPC <= kr_phi)
++#define KR_READ(addr, v) do { if (kr_on && (uint32)(addr) >= kr_rlo && (uint32)(addr) <= kr_rhi && KR_PCOK) kr_log(0, addr, v, 0); } while (0)
++#define KR_WRITE(addr, v) do { if (kr_on && (uint32)(addr) >= kr_wlo && (uint32)(addr) <= kr_whi && KR_PCOK) kr_log(1, addr, v, 0); } while (0)
++#endif
+diff --git a/libretro/Makefile.common b/libretro/Makefile.common
+index ccb29c3..211dddb 100644
+--- a/libretro/Makefile.common
++++ b/libretro/Makefile.common
+@@ -10,6 +10,7 @@ endif
+ 
+ SOURCES_C   := $(CORE_DIR)/filter/snes_ntsc.c
+ SOURCES_CXX := $(CORE_DIR)/apu/apu.cpp \
++	$(CORE_DIR)/kr_trace.cpp \
+ 				 $(CORE_DIR)/apu/bapu/dsp/sdsp.cpp \
+ 				 $(CORE_DIR)/apu/bapu/smp/smp.cpp \
+ 				 $(CORE_DIR)/apu/bapu/smp/smp_state.cpp \
