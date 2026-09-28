@@ -16,7 +16,11 @@ v1.0부터 정식판입니다. 번역 검수를 마치고 [알려진 한계](#�
 
 ## 패치 적용
 
+패치 파일: [`patch/Jissen_Mahjong_Shinan_KR_v0.9.ips`](patch/Jissen_Mahjong_Shinan_KR_v0.9.ips)
+
 이 패치는 IPS 형식입니다. 게임 ROM은 포함하지 않으며 배포하지도 않습니다.
+
+[Floating IPS](https://github.com/Alcaro/Flips) 같은 IPS 패치 도구로 원본 ROM에 적용하세요.
 
 | 항목 | 값 |
 |---|---|
@@ -28,7 +32,7 @@ v1.0부터 정식판입니다. 번역 검수를 마치고 [알려진 한계](#�
 
 | 파일 | SHA-1 |
 |---|---|
-| `Jissen_Mahjong_Shinan_KR.ips` | `2cd380b75867945bc1302cfdbf772aca6aff2033` |
+| `Jissen_Mahjong_Shinan_KR_v0.9.ips` | `2cd380b75867945bc1302cfdbf772aca6aff2033` |
 | 패치 적용 후 ROM | `be56c529ea9d5835a7f0da9f311718ac482570e2` |
 
 다른 판본이나 512바이트 헤더가 붙은 파일에 적용하면 게임이 깨집니다. 적용 전에 SHA-1을 확인하세요.
